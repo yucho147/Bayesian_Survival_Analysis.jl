@@ -1,0 +1,44 @@
+seed: 147
+
+proper_num: &proper_num 200
+mid_career_num: &mid_career_num 200
+high_career_num: &high_career_num 10
+
+generateold:
+  - N: *proper_num
+    workertype: 1
+    λ: 2.5
+  - N: *mid_career_num
+    workertype: 2
+    λ: 8.0
+  - N: *high_career_num
+    workertype: 3
+    λ: 8.0
+
+generategender:
+  - N: *proper_num
+    workertype: 1
+    p: 0.65
+  - N: *mid_career_num
+    workertype: 2
+    p: 0.7
+  - N: *high_career_num
+    workertype: 3
+    p: 0.9
+
+generategakui:
+  stats:
+    # 新卒
+    - young:  [0., 1.0, 0.0, 0.0]
+      middle: [0., 0.15, 0.85, 0.0]
+      senior: [0., 0.1, 0.4, 0.5]
+
+    # 中途
+    - young:  [0.4, 0.6, 0.0, 0.0]
+      middle: [0.4, 0.5, 0.1, 0.0]
+      senior: [0.3, 0.3, 0.3, 0.1]
+
+    # 役員
+    - young:  [0.05, 0.7, 0.2, 0.05]
+      middle: [0.05, 0.7, 0.2, 0.05]
+      senior: [0.05, 0.7, 0.2, 0.05]
