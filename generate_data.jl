@@ -13,6 +13,6 @@ df = DataFrame(
 )
 insertcols!(df, 1, :gakui => Bayesian_Survival_Analysis.generategakui(;df=df, stats=data[:generategakui][:stats]))
 
-insertcols!(df, 1, :yearofjoin => Bayesian_Survival_Analysis.generategakui(;df=df, stats=data[:generateyearofjoin][:stats]))
+insertcols!(df, 1, :yearofjoin => Bayesian_Survival_Analysis.generateyearofjoin(;df=df, stats=data[:generateyearofjoin][:stats]))
 
 show(df)

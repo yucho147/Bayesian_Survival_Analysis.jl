@@ -50,7 +50,7 @@ function generateyearofjoin(;df::DataFrame, stats::Union{Vector, Nothing}=nothin
 
   function judgeyearofjoin(record, stats)
     workertype = record[:workertype]
-    rand(stats[workertype][:min_year]:stats[workertype][:min_year])
+    rand(stats[workertype][:min_year]:stats[workertype][:max_year])
   end
 
   [judgeyearofjoin(record, stats) for record in eachrow(df)]
