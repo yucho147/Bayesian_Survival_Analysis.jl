@@ -1,0 +1,8 @@
+click
+jupyterlab
+numpy
+numpyro
+pandas
+pyyaml
+toml
+lifelines

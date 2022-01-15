@@ -1,0 +1,11 @@
+version: '3'
+services:
+  python3:
+    restart: always
+    build: .
+    container_name: 'python3'
+    image: 'py3bsn'
+    tty: true
+    working_dir: '/root/'
+    volumes:
+      - ./src:/root/src
