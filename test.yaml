@@ -42,3 +42,17 @@ generategakui:
     - young:  [0.05, 0.7, 0.2, 0.05]
       middle: [0.05, 0.7, 0.2, 0.05]
       senior: [0.05, 0.7, 0.2, 0.05]
+
+generateyearofjoin:
+  stats:
+    # 新卒
+    - min_year: 0
+      max_year: 15
+
+    # 中途
+    - min_year: 0
+      max_year: 15
+
+    # 役員
+    - min_year: 10
+      max_year: 15

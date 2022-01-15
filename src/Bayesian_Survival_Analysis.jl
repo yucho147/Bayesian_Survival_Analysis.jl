@@ -37,6 +37,26 @@ function generategender(;N::Int, workertype::Int, p::Union{Float64, Nothing}=not
 end
 # generategender(;N::Int, workertype::Symbol, p::Union{Float64, Nothing}=nothing)::Vector{Int} = generategender(;N=N, workertype=get(workertypedict, workertype, -1), p=p)
 
+function generateyearofjoin(;df::DataFrame, stats::Union{Vector, Nothing}=nothing)::Vector{Int}
+  if isnothing(stats)
+    stats = [
+      Dict(:min_year => 0, :max_year => 15),
+
+      Dict(:min_year => 0, :max_year => 15),
+
+      Dict(:min_year => 10, :max_year => 15)
+    ]
+  end
+
+  function judgeyearofjoin(record, stats)
+    workertype = record[:workertype]
+    rand(stats[workertype][:min_year]:stats[workertype][:min_year])
+  end
+
+  [judgeyearofjoin(record, stats) for record in eachrow(df)]
+end
+
+
 function generategakui(;df::DataFrame, stats::Union{Vector, Nothing}=nothing)::Vector{Int}
   if isnothing(stats)
     stats = [
