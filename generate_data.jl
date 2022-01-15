@@ -3,6 +3,7 @@ import Bayesian_Survival_Analysis
 import Random
 using CSV
 using DataFrames
+# using Revise
 
 data = YAML.load_file("test.yaml"; dicttype=Dict{Symbol,Any})
 Random.seed!(data[:seed])
