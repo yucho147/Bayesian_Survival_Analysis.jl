@@ -76,33 +76,13 @@ function generategakui(;df::DataFrame, stats::Union{Vector, Nothing}=nothing)::V
 
   function judgegakui(record, stats)
     old, workertype = record[:old], record[:workertype]
-    if workertype == 1
-      # 新卒
-      if 22 ≤ old ≤ 23
-        output = sample([0, 1, 2, 3], Weights(stats[1][:young]))
-      elseif 24 ≤ old ≤ 26
-        output = sample([0, 1, 2, 3], Weights(stats[1][:middle]))
-      elseif 27 ≤ old
-        output = sample([0, 1, 2, 3], Weights(stats[1][:senior]))
-      end
-    elseif workertype == 2
-      # 中途
-      if 22 ≤ old ≤ 23
-        output = sample([0, 1, 2, 3], Weights(stats[2][:young]))
-      elseif 24 ≤ old ≤ 26
-        output = sample([0, 1, 2, 3], Weights(stats[2][:middle]))
-      elseif 27 ≤ old
-        output = sample([0, 1, 2, 3], Weights(stats[2][:senior]))
-      end
-    elseif workertype == 3
-      # 役員
-      if 22 ≤ old ≤ 23
-        output = sample([0, 1, 2, 3], Weights(stats[3][:young]))
-      elseif 24 ≤ old ≤ 26
-        output = sample([0, 1, 2, 3], Weights(stats[3][:middle]))
-      elseif 27 ≤ old
-        output = sample([0, 1, 2, 3], Weights(stats[3][:senior]))
-      end
+    # 新卒
+    if 22 ≤ old ≤ 23
+      output = sample([0, 1, 2, 3], Weights(stats[workertype][:young]))
+    elseif 24 ≤ old ≤ 26
+      output = sample([0, 1, 2, 3], Weights(stats[workertype][:middle]))
+    elseif 27 ≤ old
+      output = sample([0, 1, 2, 3], Weights(stats[workertype][:senior]))
     end
     output
   end
