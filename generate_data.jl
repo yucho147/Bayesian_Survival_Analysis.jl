@@ -1,6 +1,7 @@
 import YAML
 import Bayesian_Survival_Analysis
 import Random
+using CSV
 using DataFrames
 
 data = YAML.load_file("test.yaml"; dicttype=Dict{Symbol,Any})
@@ -27,3 +28,5 @@ insertcols!(df, 1, :seniority => Bayesian_Survival_Analysis.generateseniority(;d
 insertcols!(df, 1, :censored => Bayesian_Survival_Analysis.generatecensored(;df=df))
 
 show(df)
+
+df |> CSV.write("./data/dummy_data.csv", delim=',', writeheader=true)
