@@ -1,8 +1,8 @@
 seed: 147
 
-proper_num: &proper_num 200
-mid_career_num: &mid_career_num 200
-high_career_num: &high_career_num 10
+proper_num: &proper_num 600
+mid_career_num: &mid_career_num 700
+high_career_num: &high_career_num 20
 
 generateold:
   - N: *proper_num
