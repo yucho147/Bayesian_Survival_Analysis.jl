@@ -89,4 +89,50 @@ function generategakui(;df::DataFrame, stats::Union{Vector, Nothing}=nothing)::V
   [judgegakui(record, stats) for record in eachrow(df)]
 end
 
+"""
+scoreを算出し、scoreが高いほど勤続年数を伸ばす設定とする
+昔ブラックだったが、近年ホワイトになる会社を想定
+学位を積めば積むほど勤続年数が伸びる設定
+入社時の年齢が若いほど勤続年数が短くなる設定
+性別は勤続年数に依らない設定
+勤続年数は「役員->新卒->中途」の順で短くなる設定
+"""
+function generateseniority(;df::DataFrame)::Vector{Int}
+  function judgeseniority(record)
+    yearofjoin, gakui, old, gender, workertype = record[:yearofjoin], record[:gakui], record[:old], record[:gender], record[:workertype]
+    score = - yearofjoin / 10.0 + gakui / 3. + old / 20.
+    if workertype == 3
+      score += 5.
+    elseif workertype == 1
+      score += 2.
+    else
+      score += 1.
+    end
+    score
+  end
+
+  N = nrow(df)
+  X = [judgeseniority(record) for record in eachrow(df)]
+
+  dt = fit(UnitRangeTransform, X, dims=1)
+  normalizedX = StatsBase.transform(dt, X)
+
+  noisedX = normalizedX .+ rand(Uniform(-0.1, 0.1), N)
+  dt = fit(UnitRangeTransform, noisedX, dims=1)
+  normalizedX = StatsBase.transform(dt, noisedX)
+
+  seniority = round.(Int, normalizedX .* 20)
+  [s > y ? y : s for (s, y) in zip(seniority, df.yearofjoin)]
+end
+
+function generatecensored(;df::DataFrame)::Vector{Int}
+  function judgecensored(record)
+    seniority, yearofjoin = record[:seniority], record[:yearofjoin]
+    seniority == yearofjoin ? 1 : 0
+  end
+
+  [judgecensored(record) for record in eachrow(df)]
+end
+
+
 end # module

@@ -20,4 +20,10 @@ insertcols!(df, 1, :gakui => Bayesian_Survival_Analysis.generategakui(;df=df, st
 # 入社年(何年前に入社したか?)
 insertcols!(df, 1, :yearofjoin => Bayesian_Survival_Analysis.generateyearofjoin(;df=df, stats=data[:generateyearofjoin][:stats]))
 
+# 勤続年数
+insertcols!(df, 1, :seniority => Bayesian_Survival_Analysis.generateseniority(;df=df))
+
+# 打ち切りフラグ
+insertcols!(df, 1, :censored => Bayesian_Survival_Analysis.generatecensored(;df=df))
+
 show(df)
