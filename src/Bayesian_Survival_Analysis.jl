@@ -76,7 +76,6 @@ function generategakui(;df::DataFrame, stats::Union{Vector, Nothing}=nothing)::V
 
   function judgegakui(record, stats)
     old, workertype = record[:old], record[:workertype]
-    # 新卒
     if 22 ≤ old ≤ 23
       output = sample([0, 1, 2, 3], Weights(stats[workertype][:young]))
     elseif 24 ≤ old ≤ 26
