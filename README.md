@@ -11,3 +11,7 @@
 ```
 julia --project=@. generate_data.jl
 ```
+または
+```
+julia --project=@. generate_data.jl --conf ./configs/generate_data_config.yaml
+```
