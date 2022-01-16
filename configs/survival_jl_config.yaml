@@ -1,0 +1,3 @@
+seed: 147
+input_data: ./data/dummy_data.csv
+nrow: 5
