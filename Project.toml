@@ -4,6 +4,7 @@ authors = ["yucho147 <yucho147@gmail.com> and contributors"]
 version = "0.1.0"
 
 [deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -14,7 +15,8 @@ Survival = "8a913413-2070-5976-9d4c-2b364fdc2f7f"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 
 [compat]
-CSV = "0.9"
+ArgParse = "1"
+CSV = "0.9, 0.10"
 DataFrames = "1"
 Distributions = "0.25"
 Revise = "3"

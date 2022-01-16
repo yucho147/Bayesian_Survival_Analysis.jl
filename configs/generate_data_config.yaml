@@ -56,3 +56,5 @@ generateyearofjoin:
     # 役員
     - min_year: 10
       max_year: 15
+
+output_path: ./data/dummy_data.csv
