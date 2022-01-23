@@ -52,3 +52,5 @@ x9    4.69004     0.209301   22.4081       <1e-99
 x10  -2.98273     0.405289   -7.35952      <1e-12
 ─────────────────────────────────────────────────
 ```
+
+[Kaplanmeierの結果](https://raw.githubusercontent.com/yucho147/Bayesian_Survival_Analysis.jl/dev_survival_jl/outputs/figs/Survival_jl/KaplanMeier_fig.png)
