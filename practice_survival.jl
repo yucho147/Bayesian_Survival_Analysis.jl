@@ -3,7 +3,7 @@ import YAML
 using ArgParse
 using CSV
 using DataFrames
-# using Distributions
+using Plots
 using StatsBase
 using StatsModels
 using Survival
@@ -77,8 +77,46 @@ function main()
   display(y[1:conf[:nrow]])
   println()
 
-  model = fit(CoxModel, X, y; conf[:model][:params]...)
-  @show model
+  coxmodel = fit(CoxModel, X, y; conf[:models][:coxph][:params]...)
+  @show coxmodel
+
+  # KaplanMeier
+  kmmodel = fit(KaplanMeier, map(x -> x.time, y), map(x -> x.status, y))
+  @show kmmodel
+
+  (ϵ⁻, ϵ⁺) = (
+    [s for s in kmmodel.survival] .- [i[1] for i in confint(kmmodel)],
+    [i[2] for i in confint(kmmodel)] .- [s for s in kmmodel.survival]
+  )
+  plot(
+    [(t, s) for (s, t) in zip(kmmodel.survival, kmmodel.times)],
+    seriestype = :stepmid, title="KaplanMeier", xlabel="year"
+  )
+  scatter!(
+    [(t, s) for (s, t) in zip(kmmodel.survival, kmmodel.times)]
+    , yerror=(ϵ⁻, ϵ⁺), legend=false
+  )
+  png(conf[:outputs][:kmmodel_fig])
+
+  # NelsonAalen
+  namodel = fit(NelsonAalen, map(x -> x.time, y), map(x -> x.status, y))
+  @show namodel
+
+  # # cumulative hazard functionなので KaplanMeier とは異なる
+  # # survivalと言う要素は存在しない
+  # (ϵ⁻, ϵ⁺) = (
+  #   [s for s in namodel.survival] .- [i[1] for i in confint(namodel)],
+  #   [i[2] for i in confint(namodel)] .- [s for s in namodel.survival]
+  # )
+  # plot(
+  #   [(t, s) for (s, t) in zip(namodel.survival, namodel.times)],
+  #   seriestype = :stepmid, title="NelsonAalen", xlabel="year"
+  # )
+  # scatter!(
+  #   [(t, s) for (s, t) in zip(namodel.survival, namodel.times)]
+  #   , yerror=(ϵ⁻, ϵ⁺), legend=false
+  # )
+  # png(conf[:outputs][:namodel_fig])
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__

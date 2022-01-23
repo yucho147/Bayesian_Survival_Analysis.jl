@@ -2,6 +2,11 @@ seed: 147
 input_data: ./data/dummy_data.csv
 nrow: 5
 
-model:
-  params:
-    l2_cost: 1.
+models:
+  coxph:
+    params:
+      l2_cost: 1.
+
+outputs:
+  kmmodel_fig: ./outputs/figs/Survival_jl/KaplanMeier_fig.png
+  namodel_fig: ./outputs/figs/Survival_jl/NelsonAalen_fig.png
