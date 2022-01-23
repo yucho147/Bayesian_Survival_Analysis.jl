@@ -11,22 +11,26 @@ using Survival
 load_config(path::String) = YAML.load_file(path; dicttype=Dict{Symbol, Any})
 set_seed(conf::Dict) = Random.seed!(conf[:seed])
 
-# https://github.com/JuliaData/DataFrames.jl/issues/355#issuecomment-24754896
-function getdummies(dfcol::Vector; prefix= " ", prefix_sep= '_')
-  #Don't use prefix_sep if prefix is " ", otherwise leave as underscore as default
-  if prefix == " "
-    prefix_sep = ' '
+# https://stackoverflow.com/questions/64565276/julia-dataframes-how-to-do-one-hot-encoding
+function getdummies!(df::DataFrame, key::String; prefix_sep::String="_", drop_col::Bool=true)
+  key = Symbol(key)
+  ux = unique(df[:, key])
+  transform!(df, @. key => ByRow(isequal(ux)) => Symbol(String(key) * prefix_sep, ux))
+  if drop_col
+    select!(df, Not(key))
   end
-
-  #Create container to hold dummies
-  resultdf = DataFrame()
-
-  #Calculate unique levels, create column for each level, do comparison and convert bool to int
-  for value in unique(dfcol)
-    insertcols!(resultdf, Symbol(strip("$prefix$prefix_sep$value")) => map(x-> Int(x == value), dfcol))
-  end
-  return resultdf
+  return df
 end
+function getdummies!(df::DataFrame, key::Symbol; prefix_sep::String="_", drop_col::Bool=true)
+  ux = unique(df[:, key])
+  transform!(df, @. key => ByRow(isequal(ux)) => Symbol(String(key) * prefix_sep, ux))
+  if drop_col
+    select!(df, Not(key))
+  end
+  return df
+end
+getdummies(df::DataFrame, key::String; prefix_sep::String="_", drop_col::Bool=true) = getdummies!(deepcopy(df), key; prefix_sep=prefix_sep, drop_col=drop_col)
+getdummies(df::DataFrame, key::Symbol; prefix_sep::String="_", drop_col::Bool=true) = getdummies!(deepcopy(df), key; prefix_sep=prefix_sep, drop_col=drop_col)
 
 function parse_commandline()
   s = ArgParseSettings()
@@ -45,15 +49,16 @@ function main()
   parsed_args = parse_commandline()
   @show parsed_args
   conf = load_config(parsed_args[:conf])
+  @show conf
 
   df = CSV.read(conf[:input_data], DataFrame)
   @show first(df, conf[:nrow])
 
-  X_df = DataFrame(gender = df.gender)
+  X_df = df[:, [:gender, :gakui, :workertype]]
 
   # ダミー変数化
-  X_df = hcat(X_df, getdummies(df.gakui, prefix="gakui"))
-  X_df = hcat(X_df, getdummies(df.workertype, prefix="workertype"))
+  getdummies!(X_df, "gakui")
+  getdummies!(X_df, "workertype")
 
   # 標準化
   dt = fit(UnitRangeTransform, Float64.(Matrix(df[:, [:yearofjoin, :old]])), dims=1)
@@ -72,8 +77,10 @@ function main()
   display(y[1:conf[:nrow]])
   println()
 
-  model = fit(CoxModel, X, y)
+  model = fit(CoxModel, X, y; conf[:model][:params]...)
   @show model
 end
 
-main()
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
+end

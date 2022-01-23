@@ -1,3 +1,7 @@
 seed: 147
 input_data: ./data/dummy_data.csv
 nrow: 5
+
+model:
+  params:
+    l2_cost: 1.
